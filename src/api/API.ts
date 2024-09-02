@@ -27,6 +27,8 @@ export const createTableRow = (payload: DocumentType, token: string) => {
   return getResource(`ru/data/v3/testmethods/docs/userdocs/create`, {
     method: "POST",
     headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
       "x-auth": token,
     },
     body: JSON.stringify(payload),
@@ -41,6 +43,8 @@ export const updateTableRow = (
   return getResource(`ru/data/v3/testmethods/docs/userdocs/set/${id}`, {
     method: "POST",
     headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
       "x-auth": token,
     },
     body: JSON.stringify(payload),
