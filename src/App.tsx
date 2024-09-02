@@ -1,10 +1,18 @@
 import { useState, useEffect } from "react";
+import {
+  Alert,
+  Container,
+  TextField,
+  Button,
+  Box,
+  Typography,
+  CssBaseline,
+} from "@mui/material";
+import { getData, RequestError } from "./utils";
 import { authorize, getTableData } from "./api/API";
 import { DocumentType } from "./model/DocumentType";
+import LoginPage from "./components/LoginPage";
 import "./App.css";
-
-/* eslint-disable-next-line @typescript-eslint/no-explicit-any */
-const getData = (response: any) => response.data;
 
 function App() {
   const [isAuthorized, setIsAuthorized] = useState(false);
@@ -31,34 +39,53 @@ function App() {
         }
       }
     };
-
-    async function handleLogin(username: string, password: string) {
-      try {
-        const data = getData(await authorize(username, password));
-        if ("token" in data) {
-          setIsAuthorized(true);
-          setUserToken(data.token);
-        }
-      } catch (error) {
-        handleLogout();
-        console.error(error);
-      }
-    }
-
-    function handleLogout() {
-      setIsAuthorized(false);
-      setUserToken(null);
-      localStorage.removeItem("token");
-    }
-
-    handleLogin("user12", "password");
-
     fetchData();
   }, [isAuthorized, userToken]);
 
+  async function handleLogin(token: string) {
+    console.log("Auth token", token);
+    setIsAuthorized(true);
+    setUserToken(token);
+    localStorage.setItem("token", token);
+  }
+
+  function handleLogout() {
+    setIsAuthorized(false);
+    setUserToken(null);
+    setData([]);
+    localStorage.removeItem("token");
+  }
+
   return (
     <>
-      <h1>Vite + React</h1>
+      {isAuthorized ? (
+        <Container component="main" maxWidth="xs">
+          <CssBaseline />
+          <Box
+            sx={{
+              marginTop: 8,
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
+          >
+            <Typography component="h1" variant="h3">
+              You successfully logined
+            </Typography>
+            <Button
+              fullWidth
+              variant="contained"
+              color="primary"
+              sx={{ mt: 3, mb: 2 }}
+              onClick={handleLogout}
+            >
+              Logout
+            </Button>
+          </Box>
+        </Container>
+      ) : (
+        <LoginPage onSuccess={handleLogin} />
+      )}
     </>
   );
 }
