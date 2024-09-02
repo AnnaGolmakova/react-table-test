@@ -3,14 +3,14 @@ import { DocumentType } from "../model/DocumentType";
 
 const BASE_URL: string = "https://test.v5.pryaniky.com";
 
-export const authorize = (email: string, password: string) => {
+export const authorize = (username: string, password: string) => {
   return getResource(`ru/data/v3/testmethods/docs/login`, {
     method: "POST",
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ email, password }),
+    body: JSON.stringify({ username, password }),
   });
 };
 

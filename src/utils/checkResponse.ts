@@ -14,7 +14,11 @@ async function checkResponse<T>(res: Response): Promise<T> {
 
   // Check if the response has an `error_code` field
   if ("error_code" in json && json["error_code"] !== 0) {
-    throw new RequestError(json["error_message"], json["error_code"], json);
+    throw new RequestError(
+      json["error_message"] || json["error_text"],
+      json["error_code"],
+      json,
+    );
   }
 
   return json;

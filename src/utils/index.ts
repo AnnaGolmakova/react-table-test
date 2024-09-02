@@ -1,4 +1,5 @@
 import checkResponse from "./checkResponse";
+import getData from "./getData";
 import RequestError from "./requestError";
 
-export { checkResponse, RequestError };
+export { checkResponse, getData, RequestError };
