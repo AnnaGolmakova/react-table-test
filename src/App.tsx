@@ -1,17 +1,15 @@
 import { useState, useEffect } from "react";
 import {
-  Alert,
   AppBar,
   Container,
-  TextField,
   Button,
   Box,
   Typography,
   Toolbar,
   CssBaseline,
 } from "@mui/material";
-import { getData, RequestError } from "./utils";
-import { authorize, getTableData, createTableRow } from "./api/API";
+import { getData } from "./utils";
+import { getTableData, createTableRow } from "./api/API";
 import { DocumentType } from "./model/DocumentType";
 import LoginPage from "./components/LoginPage";
 import DocumentTable from "./components/DocumentTable";
