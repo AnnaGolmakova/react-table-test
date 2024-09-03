@@ -122,7 +122,7 @@ const DocumentTable: React.FC<DocumentTableProps> = ({
       },
       valueSetter: (value, row) => {
         const newDate = new Date(value).toISOString();
-        return { ...row, employeeSigDate: newDate };
+        return { ...row, companySigDate: newDate };
       },
     },
     {
