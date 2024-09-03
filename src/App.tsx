@@ -11,14 +11,16 @@ import {
   CssBaseline,
 } from "@mui/material";
 import { getData, RequestError } from "./utils";
-import { authorize, getTableData } from "./api/API";
+import { authorize, getTableData, createTableRow } from "./api/API";
 import { DocumentType } from "./model/DocumentType";
 import LoginPage from "./components/LoginPage";
 import DocumentTable from "./components/DocumentTable";
+import AddDataModal from "./components/AddDataModal";
 import "./App.css";
 
 function App() {
   const [isAuthorized, setIsAuthorized] = useState(false);
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [userToken, setUserToken] = useState<string | null>(null);
   const [data, setData] = useState<DocumentType[]>([]);
 
@@ -56,6 +58,17 @@ function App() {
       }
     }
   }
+
+  const handleAddDocument = async (newDocument: DocumentType) => {
+    if (userToken) {
+      try {
+        await createTableRow(newDocument, userToken);
+        await refreshData();
+      } catch (error) {
+        console.error("Error adding new document:", error);
+      }
+    }
+  };
 
   async function handleLogin(token: string) {
     console.log("Auth token", token);
@@ -96,6 +109,13 @@ function App() {
               <Button
                 variant="text"
                 sx={{ color: "#fff" }}
+                onClick={() => setIsAddModalOpen(true)}
+              >
+                Add New Document
+              </Button>
+              <Button
+                variant="text"
+                sx={{ color: "#fff" }}
                 onClick={handleLogout}
               >
                 Logout
@@ -109,6 +129,11 @@ function App() {
               onDataChange={refreshData}
             />
           </Box>
+          <AddDataModal
+            open={isAddModalOpen}
+            onClose={() => setIsAddModalOpen(false)}
+            onSubmit={handleAddDocument}
+          />
         </Container>
       ) : (
         <LoginPage onSuccess={handleLogin} />
